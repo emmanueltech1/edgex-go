@@ -175,31 +175,6 @@ services:
     ports:
     - 127.0.0.1:49986:49986/tcp
     read_only: true
-  device-virtual:
-    container_name: edgex-device-virtual
-    depends_on:
-    - consul
-    - data
-    - metadata
-    environment:
-      CLIENTS_COMMAND_HOST: edgex-core-command
-      CLIENTS_COREDATA_HOST: edgex-core-data
-      CLIENTS_DATA_HOST: edgex-core-data
-      CLIENTS_METADATA_HOST: edgex-core-metadata
-      CLIENTS_NOTIFICATIONS_HOST: edgex-support-notifications
-      CLIENTS_RULESENGINE_HOST: edgex-kuiper
-      CLIENTS_SCHEDULER_HOST: edgex-support-scheduler
-      CLIENTS_VIRTUALDEVICE_HOST: edgex-device-virtual
-      DATABASES_PRIMARY_HOST: edgex-redis
-      EDGEX_SECURITY_SECRET_STORE: "false"
-      REGISTRY_HOST: edgex-core-consul
-      SERVICE_HOST: edgex-device-virtual
-    hostname: edgex-device-virtual
-    image: edgexfoundry/docker-device-virtual-go:1.3.0
-    networks:
-      edgex-network: {}
-    ports:
-    - 127.0.0.1:49990:49990/tcp
   metadata:
     container_name: edgex-core-metadata
     depends_on:
