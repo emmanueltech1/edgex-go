@@ -55,36 +55,26 @@ def createValueDescriptors():
     url = 'http://%s:48080/api/v1/valuedescriptor' % edgex_ip
 
     payload =   { 
-                    "name": "I-Value",
-                    "description": "SDR I-Value",
-                    "min": "-1000000.0",
-                    "max": "1000000.0",
-                    "type": "Float64",
-                    "uomLabel": "I-Value",
-                    "defaultValue": "0",
-                    "formatting": "%s",
-                    "labels": [
-                        "environment",
-                        "I-Value"
-                    ]
+                    "name":"ivalue",
+                    "description":"SDR I-Value",
+                    "type":"Float64",
+                    "uomLabel":"I-Value",
+                    "defaultValue":"0.0",
+                    "formatting":"%s",
+                    "labels":["environment","ivalue"]
                 }
     headers = {'content-type': 'application/json'}
     response = requests.post(url, data=json.dumps(payload), headers=headers, verify=False)
     print("Result for createValueDescriptors (I-Value) #1: %s - Message: %s" % (response, response.text))
 
     payload =   { 
-                    "name": "Q-Value",
-                    "description": "SDR Q-Value",
-                    "min": "-1000000.0",
-                    "max": "1000000.0",
-                    "type": "Float64",
-                    "uomLabel": "Q-Value",
-                    "defaultValue": "0",
-                    "formatting": "%s",
-                    "labels": [
-                        "environment",
-                        "Q-Value"
-                    ]
+                    "name":"qvalue",
+                    "description":"SDR Q-Value",
+                    "type":"Float64",
+                    "uomLabel":"Q-Value",
+                    "defaultValue":"0.0",
+                    "formatting":"%s",
+                    "labels":["environment","qvalue"]
                 }
     headers = {'content-type': 'application/json'}
     response = requests.post(url, data=json.dumps(payload), headers=headers, verify=False)
@@ -137,30 +127,26 @@ def addNewDevice():
     url = 'http://%s:48081/api/v1/device' % edgex_ip
 
     payload = {
-        "name": "I_and_Q_SDR_sensor_01",
-        "description": "Hack RF SDR sensor",
-        "adminState": "unlocked",
-        "operatingState": "enabled",
-        "protocols": {
-            "example": {
-                "host": "dummy",
-                "port": "1234",
-                "unitID": "1"
+                "name":"I_and_Q_SDR_sensor_01",
+                "description":"Hack RF SDR sensor",
+                "adminState":"unlocked",
+                "operatingState":"enabled",
+                "protocols": {
+                    "example": {
+                    "host": "dummy",
+                    "port": "1234",
+                    "unitID": "1"
+                    }
+                },
+                "labels": ["I Value","Q Value","HackRF"],
+                "location":"Intel - Chandler, AZ",
+                "service": {
+                    "name": "edgex-device-rest"
+                },
+                "profile": {
+                    "name":"SDR-Sensor-HackRF"
+                }
             }
-        },
-        "labels": [
-            "I Value",
-            "Q Value",
-            "HackRF"
-        ],
-        "location": "Intel - Chandler, AZ",
-        "service": {
-            "name": "edgex-device-rest"
-        },
-        "profile": {
-            "name": "SDR-Sensor-HackRF"
-        }
-    }
     headers = {'content-type': 'application/json'}
     response = requests.post(url, data=json.dumps(payload), headers=headers, verify=False)
     print("Result for addNewDevice: %s - Message: %s" % (response, response.text))

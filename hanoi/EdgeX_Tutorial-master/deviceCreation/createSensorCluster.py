@@ -101,9 +101,9 @@ def addNewDevice():
                     "operatingState":"enabled",
                     "protocols": {
                         "example": {
-                        "host": "dummy",
-                        "port": "1234",
-                        "unitID": "1"
+                        "host":"dummy",
+                        "port":"1234",
+                        "unitID":"1"
                         }
                     },
                     "labels": ["Humidity sensor","Temperature sensor","DHT11"],
