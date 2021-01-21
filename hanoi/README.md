@@ -1,0 +1,201 @@
+# EdgeX Foundry Services - Software Defined Radio Devices
+
+This device will be created using python scripts to showcase how to use the EdgeX Foundry REST APIs.
+The SDR sensor cluster, which will be generating I and Q data, will be created with the following steps:
+
+● Create value descriptors
+Value descriptors are what they sound like. They describe a value. They tell EdgeX what
+format the data comes in and what to label the data with. In this case value descriptors
+are created for temperature and humidity values respectively.
+
+● Upload the device profile
+The device profile describes a type of device within the EdgeX system. Each device managed by a device service has an association with a device profile, which defines that device type in terms of the operations which it supports.
+
+● Create the device
+Now EdgeX is finally ready to receive the device creation command in python script as
+follows:
+Two items are particularly important in this JSON body:
+ - The device service “edgex-device-rest” is used since this is a REST device.
+ - The profile name “SDR-Sensor-HackRF” must match the name in the device profile yaml
+file uploaded in the previous step.
+
+## Get Started
+
+docker-compose-hanoi-no-secty.yml
+
+docker-compose.yml
+
+RESTSDRDeviceProfile.yaml
+
+createSDRRESTDevice.py
+
+genSDRData.py
+
+requirements.txt
+
+iqsamples.float32
+
+parrotdrone_ON_2_412GHz_GAIN_0_0_0_RFSHIELDOPEN_xab_05272020_rfdata.dat
+
+3. Create virtual environment (name: “venv”)
+python3 -m venv venv
+4. Enter virtual environment
+. ./venv/bin/activate
+5. Install Python modules
+pip install -r requirements.txt
+
+
+EdgeX provides docker images in our organization's [DockerHub page](https://hub.docker.com/u/edgexfoundry/).
+They can be launched easily with **docker-compose**.
+
+The simplest way to get started is to fetch the latest docker-compose.yml and start the EdgeX containers:
+
+```sh
+wget -O docker-compose.yml \
+https://raw.githubusercontent.com/edgexfoundry/developer-scripts/master/releases/nightly-build/compose-files/docker-compose-nexus-redis.yml
+docker-compose up -d
+```
+
+You can check the status of your running EdgeX services by going to http://localhost:8500/
+
+Now that you have EdgeX up and running, you can follow our [API Walkthrough](https://docs.edgexfoundry.org/1.3/walk-through/Ch-Walkthrough/) to learn how the different services work together to connect IoT devices to cloud services.
+
+## Running EdgeX with security components
+
+Starting with the Fuji release, EdgeX includes enhanced security features that are enabled by default. There are a few major components that are responsible for security
+features: 
+
+- Security-secretstore-setup
+- Security-proxy-setup
+
+As part of Ireland release, the `security-secrets-setup` service is no more as internal service-to-service communication will not run in TLS by default in a single box.
+
+When security features are enabled, additional steps are required to access the resources of EdgeX.
+
+1. The user needs to create an access token and associate every REST request with the access token. 
+2. The exported external ports (such as 48080, 48081 etc.) will be inaccessible for security purposes. Instead, all REST requests need to go through the proxy. The proxy will redirect the request to the individual microservices on behalf of the user.
+
+Sample steps to create an access token and use the token to access EdgeX resources can be found here: [Security Components](SECURITY.md)
+
+## Other installation and deployment options
+
+### Snap Package
+
+EdgeX Foundry is also available as a snap package, for more details
+on the snap, including how to install it, please refer to [EdgeX snap](https://github.com/edgexfoundry/edgex-go/blob/master/snap/README.md)
+
+### Native binaries
+
+#### Prerequisites
+
+##### Go
+
+- The current targeted version of the Go language runtime for release artifacts is v1.15.x
+- The minimum supported version of the Go language runtime is v1.15.x
+
+##### pkg-config
+
+`go get github.com/rjeczalik/pkgconfig/cmd/pkg-config`
+
+##### ZeroMQ
+
+Several EdgeX Foundry services depend on ZeroMQ for communications by default.
+
+The easiest way to get and install ZeroMQ on Linux is to use this [setup script](https://gist.github.com/katopz/8b766a5cb0ca96c816658e9407e83d00).
+
+For macOS, use brew:
+
+```sh
+brew install zeromq
+```
+
+For directions installing ZeroMQ on Windows, please see [the Windows documentation.](ZMQWindows.md)
+
+##### pkg-config
+
+The necessary file will need to be added to the `PKG_CONFIG_PATH` environment variable.
+
+On Linux, add this line to your local profile:
+
+```sh
+export PKG_CONFIG_PATH=/usr/local/Cellar/zeromq/4.2.5/lib/pkgconfig/
+```
+
+For macOS, install the package with brew:
+
+```sh
+brew install pkg-config
+```
+
+#### Installation and Execution
+
+EdgeX is organized as Go Modules; there is no requirement to set the GOPATH or
+GO111MODULE envrionment variables nor is there a requirement to root all the components under ~/go
+(or $GOPATH) and use the `go get` command. In other words,
+
+```sh
+git clone git@github.com:edgexfoundry/edgex-go.git
+cd edgex-go
+make build
+```
+
+If you do want to root everthing under $GOPATH, you're free to use that pattern as well
+
+```sh
+GO111MODULE=on && export GO111MODULE
+go get github.com/edgexfoundry/edgex-go
+cd $GOPATH/src/github.com/edgexfoundry/edgex-go
+make build
+```
+
+To start EdgeX
+
+```sh
+make run
+```
+
+or
+
+```sh
+cd bin
+./edge-launch.sh
+```
+
+**Note** You must have a database (Redis) running before the services will operate
+correctly. If you don't want to install a database locally, you can host one via Docker. You may
+also need to change the `configuration.toml` files for one or more of the services.
+
+### Build your own Docker Containers
+
+In addition to running the services directly, Docker and Docker Compose can be used.
+
+#### Prerequisites
+
+See [the install instructions](https://docs.docker.com/install/) to learn how to obtain and install Docker.
+
+#### Installation and Execution
+
+Follow the "Installation and Execution" steps above for obtaining and building the code, then
+
+```sh
+make docker run_docker
+```
+
+**Note** The default behavior is to use Redis for the database.
+
+## Community
+
+- Chat: [https://edgexfoundry.slack.com](https://join.slack.com/t/edgexfoundry/shared_invite/enQtNDgyODM5ODUyODY0LWVhY2VmOTcyOWY2NjZhOWJjOGI1YzQ2NzYzZmIxYzAzN2IzYzY0NTVmMWZhZjNkMjVmODNiZGZmYTkzZDE3MTA)
+- Mailing lists: https://lists.edgexfoundry.org/mailman/listinfo
+
+## License
+
+[Apache-2.0](LICENSE)
+
+## Versioning
+
+Please refer to the EdgeX Foundry [versioning policy](https://wiki.edgexfoundry.org/pages/viewpage.action?pageId=21823969) for information on how EdgeX services are released and how EdgeX services are compatible with one another.  Specifically, device services (and the associated SDK), application services (and the associated app functions SDK), and client tools (like the EdgeX CLI and UI) can have independent minor releases, but these services must be compatible with the latest major release of EdgeX.
+
+## Long Term Support
+
+Please refer to the EdgeX Foundry [LTS policy](https://wiki.edgexfoundry.org/display/FA/Long+Term+Support) for information on support of EdgeX releases. The EdgeX community does not offer support on any non-LTS release outside of the latest release.
