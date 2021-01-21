@@ -1,20 +1,3 @@
-##############################################################################################################
-#     ______    __          _  __        __          _                                   __            
-#    / ____/___/ /___ ____ | |/ /   ____/ /__ _   __(_)_______     _____________  ____ _/ /_____  _____
-#   / __/ / __  / __ `/ _ \|   /   / __  / _ \ | / / / ___/ _ \   / ___/ ___/ _ \/ __ `/ __/ __ \/ ___/
-#  / /___/ /_/ / /_/ /  __/   |   / /_/ /  __/ |/ / / /__/  __/  / /__/ /  /  __/ /_/ / /_/ /_/ / /    
-# /_____/\__,_/\__, /\___/_/|_|   \__,_/\___/|___/_/\___/\___/   \___/_/   \___/\__,_/\__/\____/_/     
-#             /____/                                                                                   
-##############################################################################################################
-# Name;         createRESTDevice.py
-# Description:  Script with all REST calls required to create a new device in EdgeX Foundry - Geneva release
-#               The device in this use case exposes a REST API which EdgeX Foundry can interact with. 
-#               The device does not support sending sensor values (separate script is avilable for that use case)
-# Version:      0.1
-# Author:       Jonas Werner
-##############################################################################################################
-
-
 import requests, json, sys, re, time, os, warnings, argparse
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 from datetime import datetime
@@ -49,6 +32,7 @@ def createAddressables():
     response = requests.post(url, data=json.dumps(payload), headers=headers, verify=False)
     print("Result for createAddressables: %s - Message: %s" % (response, response.text))
 
+
 # Value descriptors are what they sound like: Describing data values
 # Note that these correspond to the same values in the device profile YAML file
 def createValueDescriptors():
@@ -80,6 +64,7 @@ def createValueDescriptors():
     response = requests.post(url, data=json.dumps(payload), headers=headers, verify=False)
     print("Result for createValueDescriptors (Q-Value) #2: %s - Message: %s" % (response, response.text))
 
+
 # To create a device we need a device profile in YAML format. This function uploads and registers
 # the device profile with EdgeX Foundry. Based on the content of the device profile, EdgeX Foundry
 # may create entries for the device in the command module as well as meta data.
@@ -95,8 +80,6 @@ def uploadDeviceProfile():
                       headers={'Content-Type': multipart_data.content_type})
 
     print("Result of uploading device profile: %s with message %s" % (response, response.text))
-
-
 
 
 # This is a dummy device service since the existing REST device service doesn't yet support sending commands
@@ -116,7 +99,6 @@ def createDeviceService():
     headers = {'content-type': 'application/json'}
     response = requests.post(url, data=json.dumps(payload), headers=headers, verify=False)
     print("Result for createDeviceService: %s - Message: %s" % (response, response.text))
-
 
 
 # Finally we can create the actual device. It will be named and will also reference both the 
@@ -141,7 +123,7 @@ def addNewDevice():
                 "labels": ["I Value","Q Value","HackRF"],
                 "location":"Intel - Chandler, AZ",
                 "service": {
-                    "name": "edgex-device-rest"
+                    "name":"edgex-device-rest"
                 },
                 "profile": {
                     "name":"SDR-Sensor-HackRF"
