@@ -44,3 +44,4 @@ snap/.snapcraft/*
 go.sum
 squashfs-root/
 hanoi/EdgeX_Tutorial-master/deviceCreation/venv/
+hanoi/EdgeX_Tutorial-master-copy/
