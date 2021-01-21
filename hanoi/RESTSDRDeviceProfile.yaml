@@ -1,0 +1,20 @@
+name: "SDR-Sensor-HackRF"
+manufacturer: "SparkFun Electronics"
+model: "Hack RF"
+labels:
+  - "SparkFun"
+description: "SDR Sensor providing measurements for I and Q values"
+
+deviceResources:
+      -
+        name: ivalue
+        description: "SDR Sensor I values"
+        properties:
+            value:
+             { type: "Float64", readWrite: "RW", floatEncoding: "eNotation", defaultValue: "0.0"}
+      -
+        name: qvalue
+        description: "SDR Sensor Q values"
+        properties:
+            value:
+             { type: "Float64", readWrite: "RW", floatEncoding: "eNotation", defaultValue: "0.0"}
