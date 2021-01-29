@@ -30,7 +30,7 @@ while True:
 
     #data = socket.recv()
     #dumps the json object into an element
-    json_str = json.dumps(data)
+    #json_str = json.dumps(data)
 
     #load the json to a string
     #resp = json.loads(json_str)
