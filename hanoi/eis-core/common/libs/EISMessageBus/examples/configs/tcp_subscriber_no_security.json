@@ -2,6 +2,6 @@
     "type": "zmq_tcp",
     "events": {
         "host": "127.0.0.1",
-        "port": 5563
+        "port": 6563
     }
 }

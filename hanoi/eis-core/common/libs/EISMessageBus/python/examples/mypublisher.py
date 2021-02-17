@@ -71,7 +71,7 @@ try:
        print("Sending values: I-Value %s, Q-Value %s" % (payloadi, payloadq))
        publisher.publish(iqdata)
 
-       i += 1
+       i += 2
 
 except KeyboardInterrupt:
     print('[INFO] Quitting...')

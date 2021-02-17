@@ -29,7 +29,7 @@ import eis.msgbus as mb
 ap = argparse.ArgumentParser()
 ap.add_argument('config', help='JSON configuration')
 ap.add_argument('-t', '--topic', default='events', help='Topic')
-ap.add_argument('-p', '--print', default=False, action='store_true',
+ap.add_argument('-p', '--print', default=True, action='store_true',
                 help='Print the received message')
 args = ap.parse_args()
 
